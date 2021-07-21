@@ -1,0 +1,68 @@
+---
+version: '2'
+services:  
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+  
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - 9092:9092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  nifi:
+    image: apache/nifi:1.12.0
+    ports:
+      - 8080:8080
+    environment:
+    #   NIFI_WEB_HTTP_HOST: localhost
+      SINGLE_USER_CREDENTIALS_USERNAME: admin
+      SINGLE_USER_CREDENTIALS_PASSWORD: adminadminadmin
+    volumes:
+      - /run/media/yamen/Data1/Study/Projects/NY_T/data/raw/yellow-taxi/:/home/data/
+
+  nifi-registry:
+    image: apache/nifi-registry
+    ports:
+      - 18080:18080
+
+  pyspark:
+    image: jupyter/pyspark-notebook
+    command: /usr/local/bin/start-notebook.sh --NotebookApp.token='' --NotebookApp.password=''
+    ports:
+      - 8888:8888
+      - 4040:4040
+    volumes:
+      - ../Spark/:/home/jovyan/work
+  
+  
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: postgres1234
+      PGDATA: postgres
+      NET: host
+    ports:
+      - 5432:5432/tcp
+    volumes:
+      - ../data/postgres_data/:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 9090:9090

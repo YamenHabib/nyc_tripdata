@@ -1,0 +1,42 @@
+docker-compose exec kafka  \
+kafka-topics --create --topic ny_tripdata --partitions 1 --replication-factor 1 --if-not-exists --zookeeper zookeeper:2181
+
+
+CREATE TABLE IF NOT EXISTS tripes(
+	id BIGSERIAL PRIMARY KEY,
+	vendor_name VARCHAR ( 50 ) NOT NULL,
+	Trip_Pickup_DateTime  TIMESTAMP NOT NULL,
+	Trip_Dropoff_DateTime TIMESTAMP NOT NULL,
+	Trip_Distance NUMERIC(5,2) NOT NULL,
+	Start_Lon float8 NOT NULL,
+	Start_Lat float8 NOT NULL,
+	End_Lon float8 NOT NULL,
+	End_Lat float8 NOT NULL,
+	trip_duration NUMERIC(10,0)
+);
+
+
+CREATE OR REPLACE FUNCTION cal_distance()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+declare
+	duration interval;
+BEGIN
+	duration = NEW.Trip_Dropoff_DateTime - NEW.Trip_Pickup_DateTime;
+	SELECT EXTRACT(epoch FROM duration) into NEW.trip_duration;
+
+	RETURN NEW;
+END;
+$$
+
+CREATE TRIGGER new_trip_inserted
+  BEFORE INSERT
+  ON tripes
+  FOR EACH ROW
+  EXECUTE PROCEDURE cal_distance();
+
+
+INSERT INTO tripes (vendor_name, Trip_Pickup_DateTime, Trip_Dropoff_DateTime, Trip_Distance, Start_Lon, Start_Lat, End_Lon, End_Lat)
+VALUES ('CMT', '2009-01-05 05:29:14', '2009-01-05 05:45:09', '7.7999999999999998','-73.995064999999997', '40.688806999999997', '-73.974406000000002', '40.759920999999999');
