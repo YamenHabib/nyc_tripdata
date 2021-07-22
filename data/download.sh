@@ -1,9 +1,9 @@
 #!/bin/bash
 
 
-YEAR_ORDINALS=("2009" "2010" "2011" "2012" "2013" "2014" "2015" "2016", "2017", "2018", "2019", "2020") 
-MONTH_ORDINALS=("01" "02" "03" "04" "05" "06" "07" "08" "09" "10" "11" "12")
-
+YEAR_ORDINALS=("2009" ) #"2010" "2011" "2012" "2013" "2014" "2015" "2016", "2017", "2018", "2019", "2020"
+MONTH_ORDINALS=("01") # "02" "03" "04" "05" "06" "07" "08" "09" "10" "11" "12"
+WAITFLAG="1" # prevent nifi from getting partially written files.
 export srcDataDirRoot=raw/yellow-taxi
 
 
@@ -19,7 +19,8 @@ download_yellow_data()
           filename="`echo $url | sed 's/trip+data/ /g' |  awk '{print $2 }'`"
           echo $filename
           echo $srcDataDirRoot$filename
-          wget $url -qO - | head -100 >> $srcDataDirRoot$filename 
+          wget $url -qO - | head -100000 >> $srcDataDirRoot$filename$WAITFLAG
+          mv $srcDataDirRoot$filename$WAITFLAG $srcDataDirRoot$filename
       done 
           
   done  
