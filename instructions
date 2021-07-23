@@ -38,10 +38,4 @@ CREATE TRIGGER new_trip_inserted
   EXECUTE PROCEDURE cal_distance();
 
 
-INSERT INTO trips (vendor_name, Trip_Pickup_DateTime, Trip_Dropoff_DateTime, Trip_Distance, Start_Lon, Start_Lat, End_Lon, End_Lat)
-VALUES ('CMT', '2009-01-05 05:29:14', '2009-01-05 05:45:09', '7.7999999999999998','-73.995064999999997', '40.688806999999997', '-73.974406000000002', '40.759920999999999');
-
-
-
-pip install kafka-python
-pip install psycopg2-binary
+select count(*) from trips;

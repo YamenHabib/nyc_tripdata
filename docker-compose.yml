@@ -43,7 +43,7 @@ services:
       - 8888:8888
       - 4040:4040
     volumes:
-      - ./Spark/:/home/jovyan/work
+      - ./analysis/:/home/jovyan/work
 
   db:
     image: postgres
