@@ -19,7 +19,7 @@ download_yellow_data()
           filename="`echo $url | sed 's/trip+data/ /g' |  awk '{print $2 }'`"
           echo $filename
           echo $srcDataDirRoot$filename
-          wget $url -qO - | head -100000 >> $srcDataDirRoot$filename$WAITFLAG
+          wget $url -qO - | head -1000 >> $srcDataDirRoot$filename$WAITFLAG
           mv $srcDataDirRoot$filename$WAITFLAG $srcDataDirRoot$filename
       done 
           
