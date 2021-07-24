@@ -29,6 +29,7 @@ The main goal of this project is to learn how to collaborate between different d
   docker-compose exec kafka  \
     kafka-topics --create --topic ny_tripdata --partitions 1 --replication-factor 1 --if-not-exists --zookeeper zookeeper:2181
  ```
+ - Upload nifi [template] (https://github.com/YamenHabib/nyc_tripdata/blob/main/ny_tripdata_nifi_template.xml) and run it.
  - you need to build the database, run  ```sudo docker ps```, get the id of postgres running container then run:
     -  ``` sudo docker ecex -it $id bash ```
     -  ``` psql -U postgres ```
