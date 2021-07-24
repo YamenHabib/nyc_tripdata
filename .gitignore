@@ -1,2 +1,3 @@
 data/postgres_data/dump_data
 data/wget-log
+analysis/postgresql-42.2.23.jar
