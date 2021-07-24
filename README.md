@@ -64,6 +64,7 @@ and nyc_tripdata_kafka_1 is the name that you need.
 
 ---------
 ### A screenshot of the web app.
+Each pair of color represents a start and end of a taxi trip.
 ![Map](https://github.com/YamenHabib/nyc_tripdata/blob/main/images/map.png)
 
 
