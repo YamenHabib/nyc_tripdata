@@ -26,14 +26,18 @@ The main goal of this project is to learn how to collaborate between different d
   ```
  - make kafka topic
  ```
-  docker-compose exec kafka  \
+  $ docker-compose exec kafka  \
     kafka-topics --create --topic ny_tripdata --partitions 1 --replication-factor 1 --if-not-exists --zookeeper zookeeper:2181
  ```
  - Upload nifi [template](https://github.com/YamenHabib/nyc_tripdata/blob/main/ny_tripdata_nifi_template.xml) and run it.
- - you need to build the database, run  ```sudo docker ps```, get the id of postgres running container then run:
-    -  ``` sudo docker ecex -it $id bash ```
-    -  ``` psql -U postgres ```
+ - you need to build the database, run  ```$ sudo docker ps```, get the id of postgres running container then run:
+    -  ```$ sudo docker ecex -it $id bash ```
+    -  ```$ psql -U postgres ```
     -  then run the sql commands in [instructions file](https://github.com/YamenHabib/nyc_tripdata/blob/main/instructions)
+
+ - to load the data into PostgresSQL database, run ```$ sudo docker ps``` to get the id of jupyter/pyspark-notebook, then run:
+ -  ```$ sudo docker ecex -it $id bash ``` to open the bash in executive mode.
+ - change directory to work, then run ``` $ python load.py```. if one of the libs not defined run ```$ pip install -r requirement.txt```.  
  - To modify nifi workflow go to: localhost: http://localhost:8080/nifi/
  - To check the map go to: http://localhost:5000
  - To modify  PySpark notebooks go to:  http://localhost:8888/tree/work
